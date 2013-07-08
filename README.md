@@ -1,6 +1,8 @@
 jobservice
 ==========
 
+You want to make your computers work for you? Good. 
+
 Installation
 ------------
 
