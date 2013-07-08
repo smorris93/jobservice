@@ -16,9 +16,10 @@ As root (Ubuntu):
 
 As unprivileged user:
 
-        $ virtualenv /tmp/example
-        $ cp *.py /tmp/example
-        $ cd /tmp/example
+        $ virtualenv <dest-dir>
+        $ cp -R <repos-dir>/server <dest-dir>
+        $ cp -R <repos-dir>/client <dest-dir>
+        $ cd <dest-dir>
         $ source bin/activate
         $ pip install Flask-RESTful
         $ pip install requests
@@ -27,5 +28,5 @@ As unprivileged user:
 Usage
 -----
 
-        $ python controller.py <number of ranges> <timeout per range>
-        $ python client.py <success> <rangeId>
+        $ python server/controller.py <number of ranges> <timeout per range>
+        $ python client/client.py <success> <rangeId>
