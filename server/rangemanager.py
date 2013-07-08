@@ -29,11 +29,12 @@ class RangeManager(object):
             return {}
 
         for lRange in self.__mRanges:
-            lCnt += 1
-            if lRange['assigned'] is False or \
-                    time.time() - lRange['startTime'] > self.__mTimeout:
+            if lRange['completed'] is False and (
+                lRange['assigned'] is False or
+                    time.time() - lRange['startTime'] > self.__mTimeout):
                 self.__assignRange(lRange, lCnt)
                 return lRange
+            lCnt += 1
 
         return {}
 
