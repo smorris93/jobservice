@@ -4,7 +4,12 @@ jobservice
 Installation
 ------------
 
-        $ aptitude install python-virtualenv libevent-dev
+As root:
+
+        # aptitude install python-virtualenv libevent-dev
+
+As unprivileged user:
+
         $ virtualenv /tmp/example
         $ cp *.py /tmp/example
         $ cd /tmp/example
