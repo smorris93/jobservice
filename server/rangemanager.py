@@ -14,7 +14,6 @@ class RangeManager(object):
         for lCnt in range(pNumRanges):
             self.__mRanges.append(
                 {
-                    'assigned': False,
                     'completed': False,
                     'startTime': 0,
                     'job': '',
@@ -29,9 +28,8 @@ class RangeManager(object):
             return {}
 
         for lRange in self.__mRanges:
-            if lRange['completed'] is False and (
-                lRange['assigned'] is False or
-                    time.time() - lRange['startTime'] > self.__mTimeout):
+            if lRange['completed'] is False and \
+                    time.time() - lRange['startTime'] > self.__mTimeout:
                 self.__assignRange(lRange, lCnt)
                 return lRange
             lCnt += 1
@@ -39,7 +37,6 @@ class RangeManager(object):
         return {}
 
     def __assignRange(self, pRange, pRangeId):
-        pRange['assigned'] = True
         pRange['startTime'] = time.time()
         pRange['rangeId'] = pRangeId
         pRange['job'] = self.defineJob(
