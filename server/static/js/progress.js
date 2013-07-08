@@ -128,7 +128,7 @@ $(document).ready(function()
                 if (pArg.success)
                 {
                     lProgressLabel.css("color", "red");
-                    lProgressLabel.text("Password: '" + pArg.message + "'");
+                    lProgressLabel.text("Result: '" + pArg.message + "'");
                 }
                 else
                 {
