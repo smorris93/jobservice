@@ -29,4 +29,4 @@ Usage
 -----
 
         $ python server/controller.py <number of ranges> <timeout per range>
-        $ python client/client.py <success> <rangeId>
+        $ python client/client.py
