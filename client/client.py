@@ -6,20 +6,17 @@ import requests
 
 def main():
     try:
-        lSuccess = sys.argv[1]
-        lRangeId = sys.argv[2]
+        HOST = "localhost"
+        PORT = 5000
 
-        lRequest = requests.get(
-            "http://localhost:5000/report?success=" + lSuccess +
-            "&rangeId=" + lRangeId + "&message=bla"
+        lResponse = requests.get(
+            "http://" + HOST + ":" + str(PORT) + "/fetch"
         )
-        lRange = json.loads(lRequest.text)
+        lRange = json.loads(lResponse.text)
         if 'job' in lRange:
-            print "Execute the following job: " + lRange['job']
+            print "Execute the following job: " + str(lRange['job'])
     except ValueError:
         print "Error. "
-    except IndexError:
-        print "Usage: " + sys.argv[0] + " <success> <rangeId>"
 
 if __name__ == '__main__':
     main()
