@@ -6,9 +6,13 @@ You want to make your computers work for you? Good.
 Installation
 ------------
 
-As root:
+As root (Debian):
 
-        # aptitude install python-virtualenv libevent-dev
+        # aptitude install python-virtualenv libevent-dev libpython-dev
+
+As root (Ubuntu):
+
+        # aptitude install python-virtualenv libevent-dev python-dev
 
 As unprivileged user:
 
