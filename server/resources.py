@@ -2,10 +2,10 @@ from flask.ext.restful import Resource
 from flask.ext.restful.reqparse import RequestParser
 
 
-class FetchJob(Resource):
+class FetchRange(Resource):
 
     def get(self):
-        return FetchJob.sModel.getRange()
+        return FetchRange.sModel.getRange()
 
 
 class Report(Resource):
