@@ -5,7 +5,8 @@ from flask.ext.restful.reqparse import RequestParser
 class FetchRange(Resource):
 
     def get(self):
-        return FetchRange.sModel.getRange()
+        lRange = FetchRange.sModel.getRange()
+        return lRange
 
 
 class Report(Resource):
