@@ -8,11 +8,11 @@ Installation
 
 As root (Debian):
 
-        # aptitude install python-virtualenv libevent-dev libpython-dev
+        # aptitude install python-virtualenv libevent-dev python-crypto python-m2crypto libpython-dev
 
 As root (Ubuntu):
 
-        # aptitude install python-virtualenv libevent-dev python-dev
+        # aptitude install python-virtualenv libevent-dev python-crypto python-m2crypto python-dev
 
 As unprivileged user:
 
