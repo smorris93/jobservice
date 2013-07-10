@@ -47,6 +47,8 @@ def main():
     except IndexError:
         print "Usage: " + sys.argv[0] + \
             " <number of ranges> <timeout per range>"
+    except KeyboardInterrupt:
+        lServer.stop()
 
 
 def poll():
