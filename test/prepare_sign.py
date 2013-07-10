@@ -11,7 +11,7 @@ def recurse(pData, pList):
             for lElem in sorted(lObj):
                 lStack.append(lElem)
         else:
-            pList.append(lObj)
+            pList.append(str(lObj))
 
 
 def canonicalize(pData):
