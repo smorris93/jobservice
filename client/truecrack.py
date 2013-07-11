@@ -12,6 +12,8 @@ import requests
 ON_POSIX = 'posix' in sys.builtin_module_names
 
 
+# taken from here
+#   http://stackoverflow.com/questions/375427/non-blocking-read-on-a-subprocess-pipe-in-python
 def enqueue_output(pOut, pQueue):
     for lLine in iter(pOut.readline, b''):
         pQueue.put(lLine)
