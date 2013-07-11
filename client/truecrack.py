@@ -1,21 +1,34 @@
+import sys
 import os
+import traceback
+import subprocess
 import json
 from time import sleep
-import subprocess
+from Queue import Queue, Empty
+from threading import Thread
+
 import requests
+
+ON_POSIX = 'posix' in sys.builtin_module_names
+
+
+def enqueue_output(pOut, pQueue):
+    for lLine in iter(pOut.readline, b''):
+        pQueue.put(lLine)
+    pOut.close()
 
 
 def main():
     try:
-        HOST = "pc16.leela"
+        HOST = "localhost"
         PORT = 5000
         MESSAGE = 'Password Not Found'
         FOUND_PASS = 'false'
-        TRUECRACK_PATH = '/netexport/tmp/truecrack-3/bin/truecrack'
-        HEADER_PATH = '/netexport/tmp/Header'
-        DICT_PATH = '/netexport/tmp/dictionary.txt'
+        TRUECRACK_PATH = '/tmp/truecrack-3/bin/truecrack'
+        HEADER_PATH = '/tmp/header.img'
+        DICT_PATH = '/tmp/small.txt'
         REFETCH_PERIOD = 2
-        WORD_SIZE = 50
+        WORD_SIZE = 0
 
         lFileSize = os.stat(DICT_PATH).st_size
 
@@ -35,15 +48,13 @@ def main():
             lRangeId = lRange['job'][0]
             lNumRanges = lRange['job'][1]
 
-            # Calculate the number of lines to process
-            #lines = lRange['lines'] * (lRangeId + 1)
-
             print "Execute the following job: " + str(lRangeId) + \
-                " of " + lNumRanges
+                " of " + str(lNumRanges)
 
             lFH = open(DICT_PATH, "rb")
             lOffsetBegin = float(lRangeId) / lNumRanges * lFileSize - WORD_SIZE
             lOffsetEnd = float(lRangeId + 1) / lNumRanges * lFileSize
+
             if lRangeId is not 0:
                 lFH.seek(
                     lOffsetBegin,
@@ -51,10 +62,6 @@ def main():
                 )
 
             # Start truecrack
-#            pass_check = subprocess.check_output(
-#                [TRUECRACK_PATH, '-t', HEADER_PATH, '-w', DICT_PATH]
-#            )
-
             lTrueCrack = subprocess.Popen(
                 [TRUECRACK_PATH, "-t", HEADER_PATH, "-w", "-"],
                 bufsize=512,
@@ -62,31 +69,48 @@ def main():
                 stdout=subprocess.PIPE
             )
 
+            lOutputQueue = Queue()
+            lThread = Thread(
+                target=enqueue_output,
+                args=(
+                    lTrueCrack.stdout,
+                    lOutputQueue
+                )
+            )
+            lThread.daemon = True
+            lThread.start()
+
             # interact with truecrack
             while lFH.tell() < lOffsetEnd:
                 # read password (line) from file
                 lPass = lFH.readline()
 
                 # forward password to process
-                lTrueCrack.stdin.write(lPass)
-                # sync/flush
-                lTrueCrack.stdin.flush()
+                lTrueCrack.stdin.write(lPass + '\n')
 
-                print("==== START TrueCrack output ====")
+            # stop the process
+            try:
+                lTrueCrack.communicate()
+            except IOError:
+                # ignore what they say :-)
+                pass
 
-                while True:
-                    lLine = lTrueCrack.stdout.readline()
-                    if lLine == '':
-                        break
-                    print(lLine)
+            lOutput = ''
+            while True:
+                # get output
+                try:
+                    lLine = lOutputQueue.get_nowait()
+                except Empty:
+                    break
+                lOutput += lLine
 
-                # get output and parse
-                # if password has been found => break
+            # parse output and forward result to server
+            print(lOutput)
+
 #                if 'Found password' in pass_check:
 #                    MESSAGE = pass_check.split()[9]
 #                    FOUND_PASS = 'true'
 #                    break
-                print("==== END TrueCrack output ====")
 
             # notify server
 
@@ -103,7 +127,10 @@ def main():
             )
 
     except Exception, pExc:
-        print "Error. " + str(pExc)
+        traceback.print_exc()
+    except KeyboardInterrupt:
+        # clean up here
+        pass
 
 
 if __name__ == '__main__':
