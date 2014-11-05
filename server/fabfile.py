@@ -5,7 +5,7 @@ import os
 env.hosts = ['pc1.leela', 'pc2.leela', 'pc3.leela', 'pc4.leela', 'pc5.leela', 'pc6.leela', 'pc8.leela', 'pc9.leela', 'pc10.leela''pc11.leela', 'pc12.leela', 'pc13.leela', 'pc14.leela', 'pc15.leela', 'pc17.leela', 'pc18.leela', 'pc19.leela', 'pc20.leela']
 
 x = env.hosts
-env.password = 'D3w0akC#c'
+env.password = ''
 HOME_PATH = '/home/is120008/Documents/'
 
 def virtualenv(command):
